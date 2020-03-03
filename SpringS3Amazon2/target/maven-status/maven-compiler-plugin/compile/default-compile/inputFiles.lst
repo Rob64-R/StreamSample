@@ -1,0 +1,5 @@
+/home/rodjimc/Documents/Workspace/StreamSample/SpringS3Amazon2/src/main/java/com/javasampleapproach/s3/Application.java
+/home/rodjimc/Documents/Workspace/StreamSample/SpringS3Amazon2/src/main/java/com/javasampleapproach/s3/services/S3Service.java
+/home/rodjimc/Documents/Workspace/StreamSample/SpringS3Amazon2/src/main/java/com/javasampleapproach/s3/config/S3Config.java
+/home/rodjimc/Documents/Workspace/StreamSample/SpringS3Amazon2/src/main/java/com/javasampleapproach/s3/services/impl/S3ServicesImpl.java
+/home/rodjimc/Documents/Workspace/StreamSample/SpringS3Amazon2/src/main/java/com/javasampleapproach/s3/controller/S3Controller.java
