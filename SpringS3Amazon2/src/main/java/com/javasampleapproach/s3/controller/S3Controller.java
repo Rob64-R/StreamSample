@@ -16,9 +16,9 @@ public class S3Controller {
 	@Autowired
 	private S3ServicesImpl s3Service;
 	
-	@GetMapping(value = "/{key}")
-	public ResponseEntity<String> getFile(@PathVariable String key) {
-		s3Service.downloadFile(key);
+	@GetMapping(value = "/{bucketName}/download/{keyName}")
+	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName ,@PathVariable String keyName) {
+		s3Service.downloadFileFromBucket(bucketName, keyName);
 		return new ResponseEntity<String>("Success!", HttpStatus.OK);
 	}
 }

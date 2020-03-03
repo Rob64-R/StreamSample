@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +27,15 @@ public class S3ServicesImpl implements S3Services {
 	@Autowired
 	private AmazonS3 s3client;
 
-	@Value("${s3.bucket}")
-	private String bucketName;
+	@Autowired
+	Map<String, String> buckets;
+	
 
 	@Override
-	public void downloadFile(String keyName) {
-		try (S3Object object = s3client.getObject(bucketName, keyName);
+	public void downloadFileFromBucket(String bucketName, String keyName) {
+		try (S3Object object = s3client.getObject(buckets.get(bucketName), keyName);
 				S3ObjectInputStream s3is = object.getObjectContent();
-				FileOutputStream fos = new FileOutputStream(new File(keyName))) {
+				FileOutputStream fos = new FileOutputStream(new File("files/"+bucketName+"/" + keyName))) {
 
 			byte[] read_buf = new byte[1024];
 			int read_len = 0;
