@@ -15,7 +15,7 @@ public class Parsers {
 
 	// CSV
 	
-    public static List<Map<String, String>> readCsv(File file) throws IOException {
+    public static List<Map<String, String>> readCsv(File csvFile) throws IOException {
     	CsvMapper csvMapper = new CsvMapper();
     	
         CsvSchema schema = CsvSchema
@@ -27,17 +27,19 @@ public class Parsers {
         MappingIterator<Map<String, String>> mappingIterator = csvMapper
         		.readerFor(Map.class)
         		.with(schema)
-        		.readValues(file);
+        		.readValues(csvFile);
 
-        return mappingIterator.readAll();
+        List<Map<String, String>> listOfMaps = mappingIterator.readAll();
+        
+        return listOfMaps;
     }
     
-    public static void writeAsCsv(List<Map<String, String>> data, File file) throws IOException {
+    public static void writeAsCsv(List<Map<String, String>> listOfMaps, File csvFile) throws IOException {
     	CsvMapper csvMapper = new CsvMapper();
     	CsvSchema schema;
     	
         CsvSchema.Builder schemaBuilder = CsvSchema.builder();
-        for (String col : data.get(0).keySet()) {
+        for (String col : listOfMaps.get(0).keySet()) {
                 schemaBuilder.addColumn(col);
             }
         schema = schemaBuilder
@@ -45,21 +47,21 @@ public class Parsers {
         		.withLineSeparator("\r")
         		.withHeader();
   
-        csvMapper.writer(schema).writeValue(file, data);
+        csvMapper.writer(schema).writeValue(csvFile, listOfMaps);
     }
 
     // JSON
     
-    public static List<Map<String, String>> readJson(File file) throws IOException {
+    public static List<Map<String, String>> readJson(File jsonFile) throws IOException {
     	ObjectMapper objectMapper = new ObjectMapper();
-    	List<Map<String, String>> data = objectMapper
-    			.readValue(file, new TypeReference<List<Map<String, Object>>>(){});
+    	List<Map<String, String>> listOfMaps = objectMapper
+    			.readValue(jsonFile, new TypeReference<List<Map<String, Object>>>(){});
     	
-    	return data;
+    	return listOfMaps;
     }
     
-    public static void writeAsJson(List<Map<String, String>> data, File file) throws IOException {
+    public static void writeAsJson(List<Map<String, String>> listOfMaps, File jsonFile) throws IOException {
     	ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(file, data);
+        objectMapper.writeValue(jsonFile, listOfMaps);
     }
 }
