@@ -20,39 +20,37 @@ public class S3Config {
 
 	@Value("${aws.secret_access_key}")
 	private String awsKey;
-	
+
 	@Value("${s3.region}")
 	private String region;
-	
+
 	@Value("${s3.sourceBucket}")
 	private String sourceBucket;
-	
+
 	@Value("${s3.persistBucket}")
 	private String persistBucket;
-	
+
 	@Value("${s3.outputBucket}")
 	private String outputBucket;
 
 	@Bean
 	public AmazonS3 s3client() {
-		
+
 		BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsId, awsKey);
-		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-								.withRegion(Regions.fromName(region))
-		                        .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-		                        .build();
-		
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.fromName(region))
+				.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
+
 		return s3Client;
 	}
-	
+
 	@Bean
-	public Map<String, String> buckets(){
-		
+	public Map<String, String> buckets() {
+
 		Map<String, String> buckets = new HashMap<>();
 		buckets.put("source", sourceBucket);
 		buckets.put("persist", persistBucket);
 		buckets.put("outputt", outputBucket);
-		
+
 		return buckets;
 	}
 }

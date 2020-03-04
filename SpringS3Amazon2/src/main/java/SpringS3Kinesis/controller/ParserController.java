@@ -15,16 +15,16 @@ import static SpringS3Kinesis.common.methods.Parsers.*;
 @Controller
 public class ParserController {
 	@GetMapping(value = "/{bucketName}/parse/{keyName}")
-	public ResponseEntity<String> parseCsvToJson(@PathVariable String bucketName, @PathVariable String keyName) {
+	public ResponseEntity<String> parseCsvToJson(@PathVariable String bucketName, @PathVariable String keyName) throws Exception {
 		String csvPath = "files/"+bucketName +"/"+ keyName + ".csv";
 		File csvFile = new File(csvPath);
 		
-		String JsonPath = "files/"+bucketName +"/"+ keyName + ".json";
-		File JsonFile = new File(JsonPath);
+		String jsonPath = "files/persist/" + keyName + ".json";
+		File jsonFile = new File(jsonPath);
 		
 		try {
 			List<Map<?, ?>> data = readCsv(csvFile);
-			writeAsJson(data, JsonFile);
+			writeAsJson(data, jsonFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
