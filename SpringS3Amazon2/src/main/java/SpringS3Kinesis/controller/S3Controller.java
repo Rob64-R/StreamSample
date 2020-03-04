@@ -56,19 +56,19 @@ public class S3Controller {
 
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
-			return new ResponseEntity<String>("Failed to upload " + keyName + " to " + bucketName,
+			return new ResponseEntity<String>("Failed to upload  (File not found)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
-			return new ResponseEntity<String>("Failed to upload " + keyName + " to " + bucketName,
+			return new ResponseEntity<String>("Failed to upload (IOException)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (AmazonServiceException e) {
 			System.err.println(e.getErrorMessage());
-			return new ResponseEntity<String>("Failed to upload " + keyName + " to " + bucketName,
+			return new ResponseEntity<String>("Failed to upload (Amazon Service Exception)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Failed to upload " + keyName + " to " + bucketName,
+			return new ResponseEntity<String>("Failed to upload (Generic Exception)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		}
 
