@@ -15,9 +15,7 @@ public class Parsers {
     public static List<Map<?, ?>> readCsv(File file) throws IOException {
         CsvSchema bootstrap = CsvSchema
         		.builder()
-        		.addColumn("year", CsvSchema.ColumnType.NUMBER)
-        		.addColumn("score", CsvSchema.ColumnType.NUMBER)
-        		.addColumn("title", CsvSchema.ColumnType.STRING)
+        		.setUseHeader(true)
         		.build()
         		.withHeader();
         CsvMapper csvMapper = new CsvMapper();
