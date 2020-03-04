@@ -1,6 +1,7 @@
 package SpringS3Kinesis.controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,10 @@ public class ParserController {
 		
 		try {
 			parserService.csvToJson(csvFile, jsonFile);
-			return new ResponseEntity<String>("Success", HttpStatus.OK);
-		} catch (Exception e) {
+			return new ResponseEntity<String>("Success! Converted file " + file + " to " +  file + "\n" + "Converted file can be found in " + jsonPath, HttpStatus.OK);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Failure, could not convert file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -46,10 +47,10 @@ public class ParserController {
 		
 		try {
 			parserService.jsonToCsv(jsonFile, csvFile);
-			return new ResponseEntity<String>("Success", HttpStatus.OK);
-		} catch (Exception e) {
+			return new ResponseEntity<String>("Success! Converted file " + file + " to " +  file + ".csv. \n" + "Converted file can be found in " + jsonPath, HttpStatus.OK);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Failure, could not convert file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
 		}
 		
 	}
