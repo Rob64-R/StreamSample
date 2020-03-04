@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.amazonaws.AmazonServiceException;
 
-import SpringS3Kinesis.services.impl.S3ServicesImpl;
+import SpringS3Kinesis.services.S3Service;
 
 @Controller
 public class S3Controller {
 
 	@Autowired
-	private S3ServicesImpl s3Service;
+	private S3Service s3Service;
 
 	@GetMapping(value = "/download/{bucketName}/{keyName}")
 	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName, @PathVariable String keyName) {
@@ -55,15 +55,15 @@ public class S3Controller {
 			return new ResponseEntity<String>("Success! File uploaded to " + bucketName, HttpStatus.OK);
 
 		} catch (FileNotFoundException e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return new ResponseEntity<String>("Failed to upload  (File not found)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 			return new ResponseEntity<String>("Failed to upload (IOException)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (AmazonServiceException e) {
-			System.err.println(e.getErrorMessage());
+			e.printStackTrace();
 			return new ResponseEntity<String>("Failed to upload (Amazon Service Exception)" + keyName + " to " + bucketName,
 					HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
