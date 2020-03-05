@@ -3,6 +3,7 @@ package SpringS3Kinesis.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,13 +65,13 @@ public class S3Config {
 				.standard()
 				.withRegion(Regions.fromName(region))
 				.withCredentials(credentialsProvider())
-				//.setClientConfiguration(config)
 				.build();
 		
 		return kinesisClient;
 	}
 	
 	@Bean
+	@Qualifier("buckets")
 	public Map<String, String> buckets() {
 
 		Map<String, String> buckets = new HashMap<>();
@@ -82,6 +83,7 @@ public class S3Config {
 	}
 	
 	@Bean
+	@Qualifier("streams")
 	public Map<String, String> streams() {
 		
 		Map<String, String> streams = new HashMap<>();

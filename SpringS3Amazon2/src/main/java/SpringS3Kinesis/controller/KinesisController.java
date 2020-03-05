@@ -13,23 +13,37 @@ import org.springframework.web.bind.annotation.PathVariable;
 import SpringS3Kinesis.services.KinesisService;
 
 @Controller
-public class KinessisController {
+public class KinesisController {
 
 	@Autowired
 	KinesisService kinesisService;
 
-	@GetMapping(value = "/upload/{input}/{file}/tostream/{stream}")
-	public ResponseEntity<String> csvToJson(@PathVariable String input, @PathVariable String fileName, @PathVariable String stream) {
+	@GetMapping(value = "/produce/{input}/{fileName}/tostream/{stream}")
+	public ResponseEntity<String> produceToStream(@PathVariable String input, @PathVariable String fileName, @PathVariable String stream) {
 		
 		String path = "files/"+input +"/"+ fileName;
 		File file = new File(path);
 		
 		try {
-			kinesisService.putRecordsfromJson(file, stream);
+			kinesisService.putRecords(file, stream);
 			return new ResponseEntity<String>("Success!", HttpStatus.OK);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping(value = "consume/fromstream/{stream}")
+	public ResponseEntity<String> consumeFromStream( @PathVariable String stream) {
+		
+		try {
+			kinesisService.getRecords(stream);
+			return new ResponseEntity<String>("Success!", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
+		}
+		
+	}
+		
 }
