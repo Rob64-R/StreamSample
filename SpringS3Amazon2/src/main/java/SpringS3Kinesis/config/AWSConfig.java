@@ -3,7 +3,6 @@ package SpringS3Kinesis.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +12,13 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesis.AmazonKinesis;
+import com.amazonaws.services.kinesis.AmazonKinesisClient;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 @Configuration
-public class S3Config {
+public class AWSConfig {
 	@Value("${aws.access_key_id}")
 	private String awsId;
 
@@ -37,15 +37,18 @@ public class S3Config {
 	@Value("${s3.outputBucket}")
 	private String outputBucket;
 	
-	@Value("${s3.stream}")
-	private String stream;
 	
+
+	
+	//Credentials
 	
 	@Bean
 	public AWSCredentialsProvider credentialsProvider() {
 		AWSCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsId, awsKey));
 		return credentialsProvider;
 	}
+	
+	//S3
 	
 	@Bean
 	public AmazonS3 s3Client() {
@@ -60,18 +63,6 @@ public class S3Config {
 	}
 	
 	@Bean
-	public AmazonKinesis kinesisClient() {
-		AmazonKinesis kinesisClient = AmazonKinesisClientBuilder
-				.standard()
-				.withRegion(Regions.fromName(region))
-				.withCredentials(credentialsProvider())
-				.build();
-		
-		return kinesisClient;
-	}
-	
-	@Bean
-	@Qualifier("buckets")
 	public Map<String, String> buckets() {
 
 		Map<String, String> buckets = new HashMap<>();
@@ -82,14 +73,19 @@ public class S3Config {
 		return buckets;
 	}
 	
-	@Bean
-	@Qualifier("streams")
-	public Map<String, String> streams() {
-		
-		Map<String, String> streams = new HashMap<>();
-		streams.put("stream", stream);
-
-		return streams;
-	}
+	//Kinesis
 	
+	@Bean
+	public AmazonKinesis kinesisClient() {
+		
+		AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard()
+		.withRegion(region)
+		.withCredentials(credentialsProvider());
+		//.setClientConfiguration(config);
+		        
+		AmazonKinesis client = clientBuilder.build();
+		return client;
+		
+		
+	}
 }

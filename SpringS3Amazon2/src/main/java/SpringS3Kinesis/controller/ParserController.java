@@ -1,6 +1,7 @@
 package SpringS3Kinesis.controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,41 +16,41 @@ import SpringS3Kinesis.services.ParserService;
 public class ParserController {
 	
 	@Autowired
-	ParserService service;
+	ParserService parserService;
 	
 	@GetMapping(value = "/parse/{input}/{file}/csvtojson/{output}")
 	public ResponseEntity<String> csvToJson(@PathVariable String input, @PathVariable String file, @PathVariable String output) {
 		
-		String csvPath = "files/"+input +"/"+ file + ".csv";
+		String csvPath = "files/"+input +"/"+ file;
 		File csvFile = new File(csvPath);
 		
-		String jsonPath = "files/"+output +"/"+ file + ".json";
+		String jsonPath = "files/"+output +"/"+ file;
 		File jsonFile = new File(jsonPath);
 		
 		try {
-			service.csvToJson(csvFile, jsonFile);
-			return new ResponseEntity<String>("Success", HttpStatus.OK);
-		} catch (Exception e) {
+			parserService.csvToJson(csvFile, jsonFile);
+			return new ResponseEntity<String>("Success! Converted file " + file + " to " +  file + "\n" + "Converted file can be found in " + jsonPath, HttpStatus.OK);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Failure, could not convert file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@GetMapping(value = "/parse/{input}/{file}/jsontocsv/{output}")
 	public ResponseEntity<String> jsonToCsv(@PathVariable String input, @PathVariable String file, @PathVariable String output) {
 		
-		String jsonPath = "files/"+input +"/"+ file + ".json";
+		String jsonPath = "files/"+input +"/"+ file;
 		File jsonFile = new File(jsonPath);
 		
-		String csvPath = "files/"+output +"/"+ file + ".csv";
+		String csvPath = "files/"+output +"/"+ file;
 		File csvFile = new File(csvPath);
 		
 		try {
-			service.jsonToCsv(jsonFile, csvFile);
-			return new ResponseEntity<String>("Success", HttpStatus.OK);
-		} catch (Exception e) {
+			parserService.jsonToCsv(jsonFile, csvFile);
+			return new ResponseEntity<String>("Success! Converted file " + file + " to " +  file + ".csv. \n" + "Converted file can be found in " + jsonPath, HttpStatus.OK);
+		} catch (IOException e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("Failure", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Failure, could not convert file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
 		}
 		
 	}

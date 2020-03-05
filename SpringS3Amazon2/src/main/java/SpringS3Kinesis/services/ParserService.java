@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 public class ParserService {
 
 	public void csvToJson(File csvFile, File jsonFile) throws IOException {
-		List<Map<String, String>> data = readCsv(csvFile);
-		writeAsJson(data, jsonFile);
+		List<Map<String, String>> listOfMaps = readCsv(csvFile);
+		writeAsJson(listOfMaps, jsonFile);
 	}
 	
 	public void jsonToCsv(File jsonFile, File csvFile) throws IOException {
-		List<Map<String, String>> data = readJson(jsonFile);
-		writeAsCsv(data, csvFile);
+		List<Map<String, String>> listOfMaps = readJson(jsonFile);
+		writeAsCsv(listOfMaps, csvFile);
 	}
 }
