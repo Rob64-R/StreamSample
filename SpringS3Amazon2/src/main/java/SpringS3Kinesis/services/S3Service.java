@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -19,6 +20,7 @@ public class S3Service {
 	private AmazonS3 s3client;
 
 	@Autowired
+	@Qualifier("buckets")
 	Map<String, String> buckets;
 
 	public void downloadFileFromBucket(String bucketName, String keyName) throws Exception {
