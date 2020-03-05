@@ -1,3 +1,5 @@
 /.metadata/
 
 SpringS3Amazon2/src/main/resources/application.properties
+
+SpringS3Amazon2/target/classes/application.properties
