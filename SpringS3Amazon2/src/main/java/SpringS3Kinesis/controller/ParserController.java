@@ -54,4 +54,45 @@ public class ParserController {
 		}
 		
 	}
+	
+	@GetMapping(value = "/encrypt/{input}/{file}/{output}")
+	public ResponseEntity<String> encryptFile(@PathVariable String input, @PathVariable String file, @PathVariable String output){
+		
+		String rootPath = "files/"+ input +"/"+ file;
+		File inputFile = new File(rootPath);
+		
+		String destination = "files/"+output +"/"+ file;
+		File outputFile = new File(destination);
+		try {
+			parserService.encrypt(inputFile, outputFile);
+			return new ResponseEntity<String>("Success! Encrypted located at: " + destination, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Failure, could not encrypt file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Failure, could not encrypt file (Generic) " + file + " to JSON", HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping(value = "/decrypt/{input}/{file}/{output}")
+	public ResponseEntity<String> decryptFile(@PathVariable String input, @PathVariable String file, @PathVariable String output){
+		
+		String rootPath = "files/"+ input +"/"+ file;
+		File path = new File(rootPath);
+		
+		String destination = "files/"+output+"/"+ file;
+		File outputPath = new File(destination);
+		try {
+			parserService.decrypt(path, outputPath);
+			return new ResponseEntity<String>("Success! Decrypted file located at: " + destination, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Failure, could not decrypt file (IOException) " + file + " to JSON", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Failure, could not decrypt file (Generic) " + file + " to JSON", HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

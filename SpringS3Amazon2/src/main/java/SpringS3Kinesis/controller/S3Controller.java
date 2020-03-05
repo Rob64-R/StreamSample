@@ -1,5 +1,6 @@
 package SpringS3Kinesis.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -20,11 +21,11 @@ public class S3Controller {
 	@Autowired
 	private S3Service s3Service;
 
-	@GetMapping(value = "/download/{bucketName}/{keyName}")
-	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName, @PathVariable String keyName) {
+	@GetMapping(value = "/download/{bucketName}/{keyName}/{folder}")
+	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName, @PathVariable String keyName, @PathVariable File folder) {
 		try {
 
-			s3Service.downloadFileFromBucket(bucketName, keyName);
+			s3Service.downloadFileFromBucket(bucketName, keyName, folder);
 			return new ResponseEntity<String>("Successfully Downloaded " + keyName + " from " + bucketName,
 					HttpStatus.OK);
 

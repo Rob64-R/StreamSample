@@ -23,11 +23,11 @@ public class S3Service {
 	@Qualifier("buckets")
 	Map<String, String> buckets;
 
-	public void downloadFileFromBucket(String bucketName, String keyName) throws Exception {
+	public void downloadFileFromBucket(String bucketName, String keyName, File folder) throws Exception {
 
-		try( S3Object object = s3client.getObject(buckets.get(bucketName), keyName);
+		try(S3Object object = s3client.getObject(buckets.get(bucketName), keyName);
 				S3ObjectInputStream s3is = object.getObjectContent();
-				FileOutputStream fos = new FileOutputStream(new File("files/" + bucketName + "/" + keyName));){
+				FileOutputStream fos = new FileOutputStream(new File("files/" + bucketName + "/" + folder + keyName));){
 
 			byte[] read_buf = new byte[1024];
 			int read_len = 0;
