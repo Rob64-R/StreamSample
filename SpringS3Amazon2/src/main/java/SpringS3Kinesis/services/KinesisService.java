@@ -1,16 +1,17 @@
 package SpringS3Kinesis.services;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -103,7 +104,7 @@ public class KinesisService {
 		return shardIterator;
 	}
 	
-	public void getRecords(String stream) throws InterruptedException {
+	public void getRecords(String stream, File file) throws InterruptedException, Exception, IOException {
 		List<Shard> shards = getShards(stream);
 		List<Record> records = new ArrayList<>();
 		
@@ -111,7 +112,7 @@ public class KinesisService {
 			String shardIterator = getShardIterator(streams.get(stream), shard);
 			GetRecordsRequest getRecordsRequest = new GetRecordsRequest()
 					.withShardIterator(shardIterator)
-					.withLimit(100);
+					.withLimit(88);
 			
 			GetRecordsResult result = kinesisClient.getRecords(getRecordsRequest);
 			records.addAll(result.getRecords());
@@ -119,10 +120,17 @@ public class KinesisService {
 			Thread.sleep(1000);
 		}
 		
-		for (Record record: records) {
-			String line = new String(record.getData().array());
-			System.out.println(line);	
+		
+		
+		try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+			for (Record record: records) {
+				String line = new String(record.getData().array());
+				writer.write(line);
+				writer.newLine();
+				System.out.println(line);	
+			}
 		}
+
 	
 	}
 	
