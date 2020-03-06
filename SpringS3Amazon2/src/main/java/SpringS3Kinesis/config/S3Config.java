@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.encrypt.Encryptors;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -19,7 +18,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 @Configuration
-public class AWSConfig {
+public class S3Config {
 	@Value("${aws.access_key_id}")
 	private String awsId;
 
@@ -78,7 +77,7 @@ public class AWSConfig {
 		Map<String, String> buckets = new HashMap<>();
 		buckets.put("source", sourceBucket);
 		buckets.put("persist", persistBucket);
-		buckets.put("output", outputBucket);
+		buckets.put("outputt", outputBucket);
 
 		return buckets;
 	}
@@ -92,6 +91,5 @@ public class AWSConfig {
 
 		return streams;
 	}
-	
 	
 }

@@ -18,10 +18,10 @@ public class KinesisController {
 	@Autowired
 	KinesisService kinesisService;
 
-	@GetMapping(value = "/produce/{bucketName}/{fileName}/to/{stream}")
-	public ResponseEntity<String> produceToStream(@PathVariable String bucketName, @PathVariable String fileName, @PathVariable String stream) {
+	@GetMapping(value = "/produce/{input}/{fileName}/tostream/{stream}")
+	public ResponseEntity<String> produceToStream(@PathVariable String input, @PathVariable String fileName, @PathVariable String stream) {
 		
-		String path = "files/"+ bucketName +"/"+ fileName;
+		String path = "files/"+input +"/"+ fileName;
 		File file = new File(path);
 		
 		try {
@@ -33,14 +33,11 @@ public class KinesisController {
 		}
 	}
 	
-	@GetMapping(value = "consume/{stream}/to/{bucketName}/{fileName}")
-	public ResponseEntity<String> consumeFromStream( @PathVariable String stream, @PathVariable String bucketName, @PathVariable String fileName) {
-		
-		String path = "files/"+ bucketName +"/"+ fileName;
-		File file = new File(path);
+	@GetMapping(value = "consume/fromstream/{stream}")
+	public ResponseEntity<String> consumeFromStream( @PathVariable String stream) {
 		
 		try {
-			kinesisService.getRecords(stream, file);
+			kinesisService.getRecords(stream);
 			return new ResponseEntity<String>("Success!", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
