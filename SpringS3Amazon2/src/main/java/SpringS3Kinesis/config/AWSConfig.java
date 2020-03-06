@@ -78,7 +78,7 @@ public class AWSConfig {
 		Map<String, String> buckets = new HashMap<>();
 		buckets.put("source", sourceBucket);
 		buckets.put("persist", persistBucket);
-		buckets.put("outputt", outputBucket);
+		buckets.put("output", outputBucket);
 
 		return buckets;
 	}
