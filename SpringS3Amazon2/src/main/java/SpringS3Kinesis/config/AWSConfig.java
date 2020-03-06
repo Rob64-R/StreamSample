@@ -3,16 +3,17 @@ package SpringS3Kinesis.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.encrypt.Encryptors;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kinesis.AmazonKinesis;
-import com.amazonaws.services.kinesis.AmazonKinesisClient;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -37,18 +38,15 @@ public class AWSConfig {
 	@Value("${s3.outputBucket}")
 	private String outputBucket;
 	
+	@Value("${s3.stream}")
+	private String stream;
 	
-
-	
-	//Credentials
 	
 	@Bean
 	public AWSCredentialsProvider credentialsProvider() {
 		AWSCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsId, awsKey));
 		return credentialsProvider;
 	}
-	
-	//S3
 	
 	@Bean
 	public AmazonS3 s3Client() {
@@ -63,29 +61,37 @@ public class AWSConfig {
 	}
 	
 	@Bean
+	public AmazonKinesis kinesisClient() {
+		AmazonKinesis kinesisClient = AmazonKinesisClientBuilder
+				.standard()
+				.withRegion(Regions.fromName(region))
+				.withCredentials(credentialsProvider())
+				.build();
+		
+		return kinesisClient;
+	}
+	
+	@Bean
+	@Qualifier("buckets")
 	public Map<String, String> buckets() {
 
 		Map<String, String> buckets = new HashMap<>();
 		buckets.put("source", sourceBucket);
 		buckets.put("persist", persistBucket);
-		buckets.put("outputt", outputBucket);
+		buckets.put("output", outputBucket);
 
 		return buckets;
 	}
 	
-	//Kinesis
-	
 	@Bean
-	public AmazonKinesis kinesisClient() {
+	@Qualifier("streams")
+	public Map<String, String> streams() {
 		
-		AmazonKinesisClientBuilder clientBuilder = AmazonKinesisClientBuilder.standard()
-		.withRegion(region)
-		.withCredentials(credentialsProvider());
-		//.setClientConfiguration(config);
-		        
-		AmazonKinesis client = clientBuilder.build();
-		return client;
-		
-		
+		Map<String, String> streams = new HashMap<>();
+		streams.put("stream", stream);
+
+		return streams;
 	}
+	
+	
 }

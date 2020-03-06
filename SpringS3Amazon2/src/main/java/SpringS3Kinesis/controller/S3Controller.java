@@ -20,11 +20,11 @@ public class S3Controller {
 	@Autowired
 	private S3Service s3Service;
 
-	@GetMapping(value = "/download/{bucketName}/{keyName}")
-	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName, @PathVariable String keyName) {
+	@GetMapping(value = "/download/{bucketName}/{keyName}/to/{folder}")
+	public ResponseEntity<String> getFileFromBucket(@PathVariable String bucketName, @PathVariable String keyName, @PathVariable String folder) {
 		try {
 
-			s3Service.downloadFileFromBucket(bucketName, keyName);
+			s3Service.downloadFileFromBucket(bucketName, keyName, folder);
 			return new ResponseEntity<String>("Successfully Downloaded " + keyName + " from " + bucketName,
 					HttpStatus.OK);
 
@@ -47,11 +47,11 @@ public class S3Controller {
 		}
 	}
 
-	@GetMapping(value = "/upload/{bucketName}/{keyName}")
-	public ResponseEntity<String> putFileIntoBucket(@PathVariable String bucketName, @PathVariable String keyName) {
+	@GetMapping(value = "/upload/{folder}/{keyName}/to/{bucketName}")
+	public ResponseEntity<String> putFileIntoBucket(@PathVariable String bucketName, @PathVariable String keyName, @PathVariable String folder) {
 		try {
 
-			s3Service.uploadFileToBucket(bucketName, keyName);
+			s3Service.uploadFileToBucket(bucketName, keyName, folder);
 			return new ResponseEntity<String>("Success! File uploaded to " + bucketName, HttpStatus.OK);
 
 		} catch (FileNotFoundException e) {
